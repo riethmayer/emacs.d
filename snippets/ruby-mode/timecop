@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: timecop
+# --
+before { Timecop.freeze(${1:2011,3,12}) }
+after  { Timecop.return }$0

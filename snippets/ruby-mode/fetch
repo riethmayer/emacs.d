@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: fetch
+# --
+fetch(:$1) { $0 }

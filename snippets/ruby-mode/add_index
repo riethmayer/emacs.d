@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: add_index
+# --
+add_index :${1:tables}, [$2]$0

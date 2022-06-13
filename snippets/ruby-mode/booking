@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: booking
+# --
+let(:booking) { booking_attributes }
+let(:zencargo_reference) { booking[:zencargo_reference] }

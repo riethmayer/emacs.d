@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: each
+# --
+each do |${1:elem}|
+  $0
+end

@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: meeting
+# --
+* Goal$1
+* Agenda$2
+* Materials$3
+* During the meeting [0/0]$0
+  - [ ] Review of the materials which have been sent around
+  - [ ] Assign someone to take notes
+  - [ ] Summarize key action items, deliverables, and points of accountability
+  - [ ] Ask what you can do better

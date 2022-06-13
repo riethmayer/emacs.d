@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: itp
+# --
+it '$1'$0

@@ -1,0 +1,4 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: link
+# --
+{{link-to $1 }}$0

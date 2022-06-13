@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: defh
+# type: command
+# --
+def ${1:name}$2
+  $0
+end
+helper_method :$1

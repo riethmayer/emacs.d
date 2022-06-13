@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: type
+# --
+module ${1:Booking}
+  module Types
+    class ${2:Type} < Dry::Struct
+      $0
+    end
+  end
+end

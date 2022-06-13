@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: map_reduce
+# --
+${1:collection}.map { |condition| ${2:condition} }.reduce(:${3:operation})

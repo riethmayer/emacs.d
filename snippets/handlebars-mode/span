@@ -1,0 +1,4 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: span
+# --
+<span class="${1:flow-text}">$2</span>$0

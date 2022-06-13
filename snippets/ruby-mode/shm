@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: shm
+# --
+require_relative '../../app/models/$0'

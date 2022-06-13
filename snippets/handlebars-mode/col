@@ -1,0 +1,4 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: col
+# --
+<div class="col $1">$2</div>$0

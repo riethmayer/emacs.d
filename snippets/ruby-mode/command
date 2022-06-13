@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# name: command
+# --
+module Command
+  class ${1:Command} < Plumbing::Command
+    attribute ${2:name}, ${3:BoundedContext}::Types::${4:TypeName}
+
+    def self.validator
+      Dry::Validation.Form do
+        required($2).filled
+      end
+    end
+  end
+end

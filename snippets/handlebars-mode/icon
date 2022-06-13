@@ -1,0 +1,4 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: icon
+# --
+<i class="${1:mdi-communication-email}${2: prefix}"></i>

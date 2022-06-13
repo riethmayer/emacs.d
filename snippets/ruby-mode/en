@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: en
+# --
+expect($1).not_to$0

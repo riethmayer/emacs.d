@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: html
+# --
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Page Title less than 55 characters</title>
+    <meta name="description" content="Description of the page less than 150 characters">
+    <link rel="icon" type="image/png" href="https://example.com/favicon.png">
+    <link rel="apple-touch-icon" href="/custom-icon.png">
+    <meta name="msapplication-config" content="browserconfig.xml" />
+    <style>/*critical css - above the fold - minified, one line*/</style>
+  </head>
+  <body>
+  </body>
+</html>

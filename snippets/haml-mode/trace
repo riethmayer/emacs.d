@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: trace
+# --
+env['st.tracer'].run('$1') do

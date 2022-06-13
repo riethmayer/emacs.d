@@ -1,0 +1,4 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: h5
+# --
+<h5>$1</h5>$0

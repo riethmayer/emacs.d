@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: skip delayed jobs
+# --
+Delayed::Worker.delay_jobs = false

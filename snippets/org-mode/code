@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: code
+# --
+#+BEGIN_SRC [${1:ruby-mode}]
+$0
+#+END_SRC

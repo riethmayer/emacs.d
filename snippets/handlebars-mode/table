@@ -1,0 +1,19 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: table
+# --
+
+<table>
+  <thead>
+    <tr>
+    <th>$1</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each $2 in model}}
+    <tr>
+      <td>$1</td>
+    </tr>
+  {{/each}}
+  </tbody>
+</table>
+$0

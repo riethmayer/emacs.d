@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: reducer
+# --
+const INITIAL_STATE = {};
+
+export default function(state = INITIAL_STATE, action){
+  switch(action.type) {
+    case $0:
+    default:
+      return state;
+  }
+}

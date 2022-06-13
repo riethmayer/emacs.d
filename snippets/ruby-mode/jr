@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: jr
+# --
+json_response do |response|
+  $0
+end

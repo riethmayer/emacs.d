@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: ec
+# --
+expect {
+$1
+}.to change($2,$3).by($4)

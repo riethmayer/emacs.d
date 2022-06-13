@@ -1,0 +1,4 @@
+# -*- mode: snippet -*-
+# name: sh
+# --
+require 'spec_helper'

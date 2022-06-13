@@ -1,0 +1,30 @@
+# -*- mode: snippet -*-
+# name: cont
+# --
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { $1 } from '../actions/index';
+
+class $2 extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return(
+     <h1>Container</h1>
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {x: state.x};
+}
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({$1}, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)($2);

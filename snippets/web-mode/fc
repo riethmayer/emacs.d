@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: fc
+# --
+const $1 = (${2:props}) => {
+  return (<${3:br}>);
+}

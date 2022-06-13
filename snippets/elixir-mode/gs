@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: gs
+# --
+use GenServer
+
+def start_link($1) do
+  GenServer.start_link(__MODULE__, $1, [])
+end
+
+def init($1) do
+  {:ok, {:state}}$0
+end

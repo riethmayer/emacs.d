@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: cont
+# --
+context '$1' do
+  $0
+end

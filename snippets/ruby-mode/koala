@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: k
+# --
+def $1
+  @koala.get_connections("me", "$1")
+end

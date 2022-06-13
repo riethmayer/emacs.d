@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: command_handler
+# --
+module ${1:BoundedContext}
+  module CommandHandlers
+    class ${2:CommandClass}
+      include Plumbing::CommandHandlers::WithAggregate
+
+      def call(command)
+        with_aggregate($1::Aggregates::$1, command.id) do |aggregate|
+          aggregate.$2
+        end
+      end
+    end
+  end
+end

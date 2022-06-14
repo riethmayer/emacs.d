@@ -1,6 +1,7 @@
-;; all packages
+;; Debug only when needed
 (setq debug-on-error t)
 
+;; PACKAGE MANAGER
 ;; Straight Package manager (instead of package)
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -20,9 +21,14 @@
 ;; end of straight config
 
 ;; PACKAGES
+
+;; PACKAGES - General
 (use-package magit
   :init
   (global-set-key (kbd "C-x g") 'magit-status)
+  (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+  :config
+  (setq magit-diff-refine-hunk t)
   :ensure t)
 
 (use-package markdown-mode
@@ -32,13 +38,10 @@
 
 (use-package company
   :init
-  (add-hook 'after-init-hook 'global-company-mode)
-  :ensure t)
-
-(use-package dracula-theme
-  :straight t
-  :init
-  (load-theme 'dracula t)
+  (setq company-idle-delay 0.0
+        company-minimum-prefix-length 1
+        company-tooltip-flip-when-above t)
+  :config (global-company-mode 1)
   :ensure t)
 
 (use-package projectile
@@ -54,9 +57,6 @@
 (use-package helm-projectile
   :init
   (global-set-key (kbd "<f5>") 'helm-projectile)
-  :ensure t)
-
-(use-package json-mode
   :ensure t)
 
 (use-package expand-region
@@ -94,8 +94,122 @@
 
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
+  :init
+  (add-hook 'prog-mode-hook 'copilot-mode)
   :ensure t)
 
+; complete by copilot first, then company-mode
+(defun my-tab ()
+  (interactive)
+  (if (magit-current-section)
+      (magit-section-toggle (magit-current-section)))
+  (or (copilot-accept-completion)
+      (company-indent-or-complete-common nil)))
+
+; modify company-mode behaviors
+(with-eval-after-load 'company
+  ;; disable inline previews
+  (delq 'company-preview-if-just-one-frontend company-frontends)
+
+  (define-key company-mode-map (kbd "<tab>") 'my-tab)
+  (define-key company-mode-map (kbd "TAB") 'my-tab)
+  (define-key company-active-map (kbd "<tab>") 'my-tab)
+  (define-key company-active-map (kbd "TAB") 'my-tab))
+
+(use-package yaml-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+  :ensure t)
+
+(use-package yasnippet
+  :init
+  (yas-global-mode 1)
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  :ensure t)
+
+;; PACKAGES - Programming
+
+(use-package json-mode
+  :ensure t)
+
+(use-package web-mode
+  :ensure t
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.jsx?\\'" . web-mode)
+         ("\\.css\\'" . web-mode)
+         ("\\.scss\\'" . web-mode)
+         ("\\.tsx?\\'" . web-mode))
+  :commands web-mode
+  :init
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-indent-style 2)
+  (setq web-mode-enable-auto-pairing t)
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-quoting t)
+  (setq web-mode-enable-auto-expanding t)
+  (setq web-mode-enable-current-element-highlight t)
+  (setq web-mode-enable-current-column-highlight t)
+  (setq web-mode-enable-auto-opening t)
+  (setq web-mode-enable-auto-indentation t))
+
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :hook (lsp-mode . lsp-enable-which-key-integration)
+  :init
+  (setq lsp-log-io nil)
+  (setq lsp-keymap-prefix "C-c l")
+  (setq lsp-restart 'auto-restart))
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode
+  :init
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-use-webkit t)
+  (setq lsp-ui-doc-delay 0.5)
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-position 'top)
+  (setq lsp-ui-doc-max-width 120)
+  (setq lsp-ui-doc-max-height 30)
+  (setq lsp-ui-side-enable t)
+  (setq lsp-ui-side-show-references t)
+  (setq lsp-ui-side-show-hover t)
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-show-diagnostics t)
+  (setq lsp-ui-sideline-show-hover t)
+  (setq lsp-ui-sideline-show-code-actions t))
+
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode))
+
+(defun enable-minor-mode (my-pair)
+  "Enable minor mode if filename match the regexp. MY-PAIR is a cons cell (regexp . minor-mode)."
+  (if (buffer-file-name)
+      (if (string-match (car my-pair) buffer-file-name)
+          (funcall (cdr my-pair)))))
+
+(use-package prettier-js
+  :ensure t
+  :init
+  (add-hook 'js-mode-hook 'prettier-js-mode)
+  (add-hook 'web-mode-hook 'prettier-js-mode)
+  (add-hook 'web-mode-hook
+            #'(lambda ()
+                (enable-minor-mode '("\\.tsx?\\'" . prettier-js-mode)
+                                   '("\\.jsx?\\'" . prettier-js-mode)))))
+
+;; APPEARANCE
+
+(use-package dracula-theme
+  :straight t
+  :init
+  (load-theme 'dracula t)
+  :ensure t)
 
 ;; Display glyph in the fringe of each empty line at the end of the buffer
 (setq-default indicate-empty-lines t)
@@ -122,6 +236,9 @@
 (setq-default sh-indentation 2)
 (setq-default python-indent 4)
 (setq-default indent-tabs-mode nil)
+(setq-default fill-column 80)
+(setq-default truncate-lines nil)
+(setq-default truncate-partial-width-windows t)
 
 (setq apropos-sort-by-scores t)
 (setq visible-bell -1)
@@ -198,6 +315,11 @@
             (require 'server)
             (unless (server-running-p)
               (server-start))))
+
+(when (string= system-type "darwin")
+  (setq dired-use-ls-dired t
+        insert-directory-program "/usr/local/bin/gls"
+        dired-listing-switches "-aBhl --group-directories-first"))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

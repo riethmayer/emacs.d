@@ -1,8 +1,8 @@
-;; Debug only when needed
-(setq debug-on-error t)
+;;; Package --- Jan Riethmayer's Emacs configuration
+;;; (setq debug-on-error t)
 
-;; PACKAGE MANAGER
-;; Straight Package manager (instead of package)
+;; PACKAGE MANAGER --- Straight.el
+
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -18,11 +18,9 @@
 
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
-;; end of straight config
 
-;; PACKAGES
 
-;; PACKAGES - General
+;; PACKAGES --- General
 (use-package magit
   :init
   (global-set-key (kbd "C-x g") 'magit-status)
@@ -92,6 +90,8 @@
   :config
   (which-key-mode))
 
+
+;;; PACKAGES --- Programming
 (use-package copilot
   :straight (:host github :repo "zerolfx/copilot.el" :files ("dist" "*.el"))
   :init
@@ -106,7 +106,6 @@
   (or (copilot-accept-completion)
       (company-indent-or-complete-common nil)))
 
-; modify company-mode behaviors
 (with-eval-after-load 'company
   ;; disable inline previews
   (delq 'company-preview-if-just-one-frontend company-frontends)
@@ -127,60 +126,42 @@
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :ensure t)
 
-;; PACKAGES - Programming
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook (lsp-mode . riethmayer/lsp-mode-setup)
+  :init
+  (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+  :config
+  (lsp-enable-which-key-integration t))
+
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  (lsp-ui-doc-position 'bottom))
 
 (use-package json-mode
   :ensure t)
 
-(use-package web-mode
-  :ensure t
-  :mode (("\\.html?\\'" . web-mode)
-         ("\\.jsx?\\'" . web-mode)
-         ("\\.css\\'" . web-mode)
-         ("\\.scss\\'" . web-mode)
-         ("\\.tsx?\\'" . web-mode))
-  :commands web-mode
-  :init
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-indent-style 2)
-  (setq web-mode-enable-auto-pairing t)
-  (setq web-mode-enable-auto-closing t)
-  (setq web-mode-enable-auto-quoting t)
-  (setq web-mode-enable-auto-expanding t)
-  (setq web-mode-enable-current-element-highlight t)
-  (setq web-mode-enable-current-column-highlight t)
-  (setq web-mode-enable-auto-opening t)
-  (setq web-mode-enable-auto-indentation t))
+(defun riethmayer/lsp-mode-setup ()
+  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  (lsp-headerline-breadcrumb-mode))
 
-(use-package lsp-mode
-  :ensure t
-  :commands lsp
-  :hook (lsp-mode . lsp-enable-which-key-integration)
-  :init
-  (setq lsp-log-io nil)
-  (setq lsp-keymap-prefix "C-c l")
-  (setq lsp-restart 'auto-restart))
+;; PACKAGES --- Web Development
 
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode
-  :init
-  (setq lsp-ui-doc-enable t)
-  (setq lsp-ui-doc-use-webkit t)
-  (setq lsp-ui-doc-delay 0.5)
-  (setq lsp-ui-doc-include-signature t)
-  (setq lsp-ui-doc-position 'top)
-  (setq lsp-ui-doc-max-width 120)
-  (setq lsp-ui-doc-max-height 30)
-  (setq lsp-ui-side-enable t)
-  (setq lsp-ui-side-show-references t)
-  (setq lsp-ui-side-show-hover t)
-  (setq lsp-ui-sideline-enable t)
-  (setq lsp-ui-sideline-show-diagnostics t)
-  (setq lsp-ui-sideline-show-hover t)
-  (setq lsp-ui-sideline-show-code-actions t))
+(use-package nvm
+  :config
+  (if (file-exists-p (expand-file-name "~/.nvm"))
+      (let ((nvm-version "v16.15.1"))
+        (condition-case nil
+            (nvm-use nvm-version)
+          (error (message "You tried to activate version %s, but it isn't installed" nvm-version))))))
+;; (executable-find "typescript-language-server")
+
+(use-package typescript-mode
+  :mode "\\.tsx?\\'"
+  :hook (typescript-mode . lsp-deferred)
+  :config
+  (setq typescript-indent-level 2))
 
 (use-package flycheck
   :ensure t
@@ -203,13 +184,15 @@
                 (enable-minor-mode '("\\.tsx?\\'" . prettier-js-mode)
                                    '("\\.jsx?\\'" . prettier-js-mode)))))
 
-;; APPEARANCE
+;; APPEARANCE --- Theme
 
 (use-package dracula-theme
   :straight t
   :init
   (load-theme 'dracula t)
   :ensure t)
+
+;; APPEARANCE --- Parenthsis
 
 ;; Display glyph in the fringe of each empty line at the end of the buffer
 (setq-default indicate-empty-lines t)
@@ -219,7 +202,7 @@
 
 (when (window-system)
   (set-frame-font "Hack")
-  (set-face-attribute 'default nil :family "Hack" :height 180)
+  (set-face-attribute 'default nil :family "Hack" :height 200)
   (set-face-font 'default "Hack"))
 
 ;; fall back on DejaVu for Unicode characters
@@ -264,7 +247,6 @@
   (interactive)
   (pbcopy)
   (delete-region (region-beginning) (region-end)))
-
 
 ;; emacs built in config
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -318,7 +300,7 @@
 
 (when (string= system-type "darwin")
   (setq dired-use-ls-dired t
-        insert-directory-program "/usr/local/bin/gls"
+        insert-directory-program "/opt/homebrew/bin/gls"
         dired-listing-switches "-aBhl --group-directories-first"))
 
 (custom-set-variables

@@ -184,6 +184,16 @@
                 (enable-minor-mode '("\\.tsx?\\'" . prettier-js-mode)
                                    '("\\.jsx?\\'" . prettier-js-mode)))))
 
+
+;; Golang
+(use-package go-mode
+  :ensure t
+  :init
+  (add-hook 'go-mode-hook 'lsp-deferred)
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+
 ;; APPEARANCE --- Theme
 
 (use-package dracula-theme
